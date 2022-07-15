@@ -1,17 +1,24 @@
 const APP_ID='1e02e46183d849cc83213ace86f08ca5';
-const CHANNEL='main';
-const TOKEN='0061e02e46183d849cc83213ace86f08ca5IAB5jeVc0vCMSxmyA8PvT2VthirBhOmD1HbZnwFcJUtDsWTNKL8AAAAAEACPl0pW5w/TYgEAAQDnD9Ni';
-let UID;
+const CHANNEL=sessionStorage.getItem('room');
+const TOKEN=sessionStorage.getItem('token');
+let UID=Number(sessionStorage.getItem('UID'));
 const client= AgoraRTC.createClient({mode:'rtc', codec:'vp8'});
 
 let localTracks=[]
 let remoteUsers={}
 
 let joinAndDisplayLocalStream=async()=>{
+    document.getElementById('room-name').innerText=CHANNEL
    client.on('user-published', handleUserJoined)
    client.on('user-left', handleUserLeft)
-   UID= await client.join(APP_ID, CHANNEL, TOKEN, null)
 
+   try{
+   await client.join(APP_ID, CHANNEL, TOKEN, UID)
+   }
+   catch(error){
+    console.error(error)
+    window.open('/','_self')
+   }
    localTracks = await AgoraRTC.createMicrophoneAndCameraTracks()
    let player= `<div class="video-container" id="user-container-${UID}">
                     <div class="username-wrapper"><span class="user-name">My Name</span></div>
