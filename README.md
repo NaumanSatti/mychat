@@ -23,6 +23,7 @@ virtualenv env
 env\Scripts\activate
 
 4) Install Requirements
+
 pip install -r requirements.txt
 
 5) Run the server
